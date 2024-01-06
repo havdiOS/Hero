@@ -152,7 +152,10 @@ public extension UIView {
   }
 
   internal func slowSnapshotView() -> UIView {
-    UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, 0)
+    let rendererFormat = UIGraphicsImageRendererFormat()
+    rendererFormat.opaque = isOpaque
+    rendererFormat.scale = 0
+    UIGraphicsImageRenderer(size: bounds.size, format: rendererFormat)
     guard let currentContext = UIGraphicsGetCurrentContext() else {
       UIGraphicsEndImageContext()
       return UIView()

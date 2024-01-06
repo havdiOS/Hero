@@ -39,7 +39,10 @@ internal extension NSCoding where Self: NSObject {
 
 internal extension UIImage {
   class func imageWithView(view: UIView) -> UIImage {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0.0)
+    let rendererFormat = UIGraphicsImageRendererFormat()
+    rendererFormat.opaque = false
+    rendererFormat.scale = 0
+    UIGraphicsImageRenderer(size: view.bounds.size, format: rendererFormat)
     view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
     let img = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
