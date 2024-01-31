@@ -155,17 +155,11 @@ public extension UIView {
     let rendererFormat = UIGraphicsImageRendererFormat()
     rendererFormat.opaque = isOpaque
     rendererFormat.scale = 0
-    UIGraphicsImageRenderer(size: bounds.size, format: rendererFormat)
-    guard let currentContext = UIGraphicsGetCurrentContext() else {
-      UIGraphicsEndImageContext()
-      return UIView()
+    let renderer = UIGraphicsImageRenderer(size: bounds.size, format: rendererFormat)
+    let screenshotImage = renderer.image { imageRendererContext in
+        layer.render(in: imageRendererContext.cgContext)
     }
-    layer.render(in: currentContext)
-
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-
-    let imageView = UIImageView(image: image)
+    let imageView = UIImageView(image: screenshotImage)
     imageView.frame = bounds
     return SnapshotWrapperView(contentView: imageView)
   }

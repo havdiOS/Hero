@@ -42,11 +42,11 @@ internal extension UIImage {
     let rendererFormat = UIGraphicsImageRendererFormat()
     rendererFormat.opaque = false
     rendererFormat.scale = 0
-    UIGraphicsImageRenderer(size: view.bounds.size, format: rendererFormat)
-    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
-    let img = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return img!
+    let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: rendererFormat)
+    let screenshotImage = renderer.image { imageRendererContext in
+        view.layer.render(in: imageRendererContext.cgContext)
+    }
+    return screenshotImage
   }
 }
 
